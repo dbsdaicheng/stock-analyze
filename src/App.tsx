@@ -1,24 +1,20 @@
-import React from 'react';
+import * as React from 'react';
+import Home from './pages/stockSelect';
+import About from './pages/about';
+import Layout from './layout';
+import { Route, Routes, useLocation } from "react-router-dom"
 import './App.css';
 
 function App() {
-  debugger;
+  let location = useLocation();
+  let state = location.state as { backgroundLocation?: Location };
   return (
-    <div className="App">
-      <header className="App-header">
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Routes>
+      <Route path="/" element={<Layout />}> 
+        <Route path="stock/select" element={<Home />}></Route>
+        <Route path="about" element={<About />}></Route>
+      </Route>
+    </Routes>
   );
 }
 

@@ -18,9 +18,11 @@ module.exports = {
     path: path.join(__dirname, '/dist'),
     filename: 'bundle.js',
     clean: true,
+    publicPath: '/'
   },
   devServer: {
     port: 8080,
+    historyApiFallback: true
   },
   mode: DEV ? 'development' : 'production',
   devtool: DEV && 'source-map',
