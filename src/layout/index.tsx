@@ -36,7 +36,7 @@ const App: React.FC = () => (
     </Sider>
     <Layout>
       <Header className="site-layout-sub-header-background" style={{ padding: 0 }} />
-      <Content style={{ margin: '24px 16px 0' }}>
+      <Content style={{ margin: '24px 16px 0', backgroundColor: "#f7f7f7" }}>
         <div className="content">
           <Outlet />
         </div>

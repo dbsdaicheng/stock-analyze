@@ -22,7 +22,15 @@ module.exports = {
   },
   devServer: {
     port: 8080,
-    historyApiFallback: true
+    historyApiFallback: true,
+    proxy: {
+      '/api': {
+        target: 'http://121.41.83.47:8080',
+        pathRewrite: {'^/api' : ''},
+        changeOrigin: true,     // target是域名的话，需要这个参数，
+        secure: false,          // 设置支持https协议的代理
+      },
+    }
   },
   mode: DEV ? 'development' : 'production',
   devtool: DEV && 'source-map',
@@ -130,6 +138,11 @@ module.exports = {
   resolve: {
     modules: ['node_modules'],
     extensions: ['.json', '.js', '.jsx', '.ts', '.tsx', '.less', 'scss'],
+    alias: {
+      "@/api": path.resolve(__dirname, './src/api'),
+      "@/utils": path.resolve(__dirname, './src/utils'),
+      "@/pages": path.resolve(__dirname , './src/pages'),
+    }
   },
   plugins: [
     new HtmlWebpackPlugin({
