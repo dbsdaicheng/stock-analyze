@@ -1,4 +1,5 @@
 import type { ColumnsType } from 'antd/es/table';
+import moment from 'moment';
 
 interface DataType {
   key: string;
@@ -8,65 +9,85 @@ interface DataType {
   phone: number;
   address: string;
 }
+interface statusTextProps {
+  [key: string]: string;
+}
 
 
 export const columns: ColumnsType<DataType> = [
   {
     title: '股票代码',
-    dataIndex: 'key',
+    dataIndex: 'symbol',
+    width: '100px'
   },
   {
     title: '股票名称',
     dataIndex: 'name',
+    width: '100px'
   },
   {
     title: '地域',
-    dataIndex: 'age',
+    dataIndex: 'area',
+    width: '80px'
   },
   {
     title: '所属行业',
-    colSpan: 2,
-    dataIndex: 'tel',
+    dataIndex: 'industry',
+    width: '100px'
   },
   {
-    title: '股票全程',
-    colSpan: 0,
-    dataIndex: 'phone',
+    title: '股票全称',
+    dataIndex: 'fullname',
+    width: '150px'
   },
-  {
-    title: '英文全称',
-    dataIndex: 'address',
-  },
+  // {
+  //   title: '英文全称',
+  //   dataIndex: 'enname',
+  //   width: '200px'
+  // },
   {
     title: '拼音缩写',
-    dataIndex: 'address',
+    dataIndex: 'cnspell',
   },
   {
     title: '市场类型',
-    dataIndex: 'address',
+    dataIndex: 'market',
   },
   {
     title: '交易所代码',
-    dataIndex: 'address',
+    dataIndex: 'exchange',
   },
   {
     title: '交易货币',
-    dataIndex: 'address',
+    dataIndex: 'currType',
   },
   {
     title: '上市状态',
-    dataIndex: 'address',
+    dataIndex: 'listStatus',
+    render: (text: string) => {
+      const status: statusTextProps = {
+        "L": "上市",
+        "D": "退市",
+        "P": "暂停上市"
+      }
+      return text && status[text];
+    }
   },
   {
     title: '上市日期',
-    dataIndex: 'address',
+    dataIndex: 'listDate',
+    render: (text, record) => moment(text).format("YYYY-MM-DD HH:mm:ss")
   },
-  {
-    title: '退市日期',
-    dataIndex: 'address',
-  },
+  // {
+  //   title: '退市日期',
+  //   dataIndex: 'delistDate',
+  //   render: (text, record) => text && moment(text).format("YYYY-MM-DD HH:mm:ss"),
+  // },
   {
     title: '是否沪深港通标的',
-    dataIndex: 'address',
+    dataIndex: 'isHs',
+    render: (text: string) => {
+      return text == "N" ? "否" : "是";
+    }
   },
 ];

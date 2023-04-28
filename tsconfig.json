@@ -1,17 +1,40 @@
 {
+  /*
+      tsconfig.json是ts编译器的配置文件，ts可以根据它的信息来对待吗进行编译 可以再tsconfig中写注释
+      include : 用来指定哪些文件需要被编译
+      exclude : 用来指定哪些文件不需要被编译 ：默认node_module
+      extends : 用来指定继承的配置文件
+      files   : 用来指定被编译的文件列表，只有编译少量文件才使用
+      compilerOptions : 编译器的选项是配置文件中非常重要也是非常复杂的配置选项
+  */
+  "include":[
+    // ** : 任意目录 ， * : 任意文件
+    "./src/**/*"
+  ],
   "compilerOptions": {
-    "outDir": "./dist/",
-    "noImplicitAny": true,
-    "module": "es6",
-    "target": "es5",
-    "jsx": "react",
-    "allowJs": true,
+    "outDir": "build/dist",
+    "module": "esnext",
+    "target": "esnext",
+    "sourceMap": true,
+    "baseUrl": "./",
+    "jsx": "react-jsx",
+    "resolveJsonModule": true,
     "allowSyntheticDefaultImports": true,
-    "moduleResolution": "Node",
+    "moduleResolution": "node",
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "suppressImplicitAnyIndexErrors": true,
+    // 有未使用的变量时，抛出错误
+    "noUnusedLocals": false,
+    "allowJs": true,
+    "skipLibCheck": true,
+    "experimentalDecorators": true,
+    "strict": true,
     "paths": {
       "@/*": ["./src/*"],
       "@/api": ["./src/api"],
       "@/utils": ["./src/utils"]
-    }
-  }
+    },
+  },
+  "exclude": ["node_modules"]
 }

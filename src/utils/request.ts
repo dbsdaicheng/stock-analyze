@@ -29,7 +29,7 @@ const addResponseFilter = (instance: AxiosInstance) => {
       errorHandle(response.status, response.data);
       return Promise.reject(response);
     } else {
-      console.log('请求失败')
+      return console.log('请求失败')
     }
   })
 };

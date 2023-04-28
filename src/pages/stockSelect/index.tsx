@@ -1,64 +1,99 @@
-import { Button, Col, Form, Row, Select, Table } from 'antd';
+import { Button, Col, Form, Input, Row, Select, Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { columns } from './config';
-import { getStockList } from '@/api/stockSelect';
+import { getIndustryList, getMarketTypes, getStockList } from '@/api/stockSelect';
 import './index.less';
 
 const formItemLayout = {
-  labelCol: { span: 8 },
-  wrapperCol: { span: 16 },
+  labelCol: { span: 4 },
+  wrapperCol: { span: 20 },
 };
+
+interface paramsProps {
+  current: number;
+  pageSize: number;
+}
+
+interface currentParamsProps {
+  name?: string;
+  market?: string;
+  industry?: string;
+  symbol?: string;
+}
+
+interface optionsProps {
+  key?: string;
+  value?: string;
+}
 
 function App() {
   const [form] = Form.useForm();
-  const [data] = useState<any[]>([])
+  const [data, setData] = useState<any[]>([]);
+  const [total, setTotal] = useState<number>(0);
+  const [params, setParams] = useState<paramsProps>({current: 1, pageSize: 10})
+  const [marketTypeOptions, setMarketTypeOptions] = useState<optionsProps[]>([]);
+  const [currentParmas, setCurrentParams] = useState<currentParamsProps>({});
+  const [industryOptions, setindustryOptions] = useState<optionsProps[]>([]);
 
   useEffect(() => {
-    getStockList(
-      {
-        "endRow": 0,
-        "hasNextPage": true,
-        "hasPreviousPage": true,
-        "industry": "",
-        "isFirstPage": true,
-        "isLastPage": true,
-        "list": [
-          {
-            "area": "",
-            "cnspell": "",
-            "currType": "",
-            "delistDate": "",
-            "enname": "",
-            "exchange": "",
-            "fullname": "",
-            "industry": "",
-            "isHs": "",
-            "listDate": "",
-            "listStatus": "",
-            "market": "",
-            "name": "",
-            "symbol": "",
-            "tsCode": ""
-          }
-        ],
-        "market": "",
-        "name": "",
-        "navigateFirstPage": 0,
-        "navigateLastPage": 0,
-        "navigatePages": 0,
-        "navigatepageNums": [],
-        "nextPage": 0,
-        "pageNum": 0,
-        "pageSize": 0,
-        "pages": 0,
-        "prePage": 0,
-        "size": 0,
-        "startRow": 0,
-        "symbol": "",
-        "total": 0
+    // 获取市场类型信息
+    getMarketType();
+    // 获取行业信息
+    getIndustry();
+  }, [])
+
+  useEffect(() => {
+    const searchParams = {
+      ...currentParmas,
+      "pageNum": params.current,
+      "pageSize": params.pageSize,
+    }
+    getStockList(searchParams).then((res: any) => {
+      setData(res?.data?.list || []);
+      setTotal(res?.data?.total);
+    })
+  }, [params, currentParmas]);
+
+  const getMarketType = async () => {
+    const res = await getMarketTypes();
+    const markettypes = res?.data.map((item: any) => {
+      return {
+        value: item,
+        key: item,
       }
-    )
-  }, []);
+    })
+    setMarketTypeOptions(markettypes || []);
+  }
+
+  const paginationChagne = (current: any, pageSize: any) => {
+    setParams({
+      current: current,
+      pageSize: pageSize,
+    })
+  }
+
+  const onSearch = () => {
+    form.validateFields().then((values) => {
+      setCurrentParams(values);
+    })
+  }
+
+  const getIndustry = async () => {
+    const res = await getIndustryList();
+    const industryList = res?.data.map((item: any) => {
+      return {
+        value: item,
+        key: item,
+      }
+    })
+    setindustryOptions(industryList || []);
+  }
+
+  const onReset = () => {
+    form.resetFields();
+    // 重新调用列表的接口
+    setCurrentParams({});
+  }
 
   return (
     <div>
@@ -68,67 +103,66 @@ function App() {
           form={form}
         >
           <Row gutter={24}>
-            <Col className="gutter-row" span={6}>
-              <Form.Item name="gender" label="股票名称">
-                <Select
-                  placeholder="股票名称关键字模糊搜索"
-                  allowClear
-                >
-                  <Select.Option value="male">male</Select.Option>
-                  <Select.Option value="female">female</Select.Option>
-                  <Select.Option value="other">other</Select.Option>
-                </Select>
+            <Col className="gutter-row" span={8}>
+              <Form.Item name="name" label="股票名称">
+                <Input placeholder="股票名称关键字模糊搜索" allowClear/>
               </Form.Item>
             </Col>
-            <Col className="gutter-row" span={6}>
-              <Form.Item name="gender" label="股票代码">
-                <Select
-                  placeholder="股票代码关键字模糊搜索"
-                  allowClear
-                >
-                  <Select.Option value="male">male</Select.Option>
-                  <Select.Option value="female">female</Select.Option>
-                  <Select.Option value="other">other</Select.Option>
-                </Select>
+            <Col className="gutter-row" span={8}>
+              <Form.Item name="symbol" label="股票代码">
+                <Input placeholder="股票代码关键字模糊搜索" allowClear/>
               </Form.Item>
             </Col>
-            <Col className="gutter-row" span={6}>
-              <Form.Item name="gender" label="行业">
+            <Col className="gutter-row" span={8}>
+              <Form.Item name="industry" label="行业">
                 <Select
-                  placeholder="股票行业选择"
-                  allowClear
-                >
-                  <Select.Option value="male">male</Select.Option>
-                  <Select.Option value="female">female</Select.Option>
-                  <Select.Option value="other">other</Select.Option>
-                </Select>
+                  showSearch
+                  placeholder="请选择行业"
+                  optionFilterProp="children"
+                  filterOption={(input, option) => (option?.value ?? '').includes(input)}
+                  filterSort={(optionA, optionB) =>
+                    (optionA?.value ?? '').toLowerCase().localeCompare((optionB?.value ?? '').toLowerCase())
+                  }
+                  options={industryOptions}
+                />
               </Form.Item>
             </Col>
-            <Col className="gutter-row" span={6}>
-              <Form.Item name="gender" label="市场类型">
+            <Col className="gutter-row" span={8}>
+              <Form.Item name="market" label="市场类型">
                 <Select
-                  placeholder="选择市场类型"
-                  allowClear
-                >
-                  <Select.Option value="male">主板</Select.Option>
-                  <Select.Option value="female">科创版</Select.Option>
-                  <Select.Option value="other">创业版</Select.Option>
-                </Select>
+                  placeholder="请选择市场类型"
+                  options={marketTypeOptions}
+                />
               </Form.Item>
             </Col>
           </Row>
           <Row gutter={24}>
             <Col span={6} offset={18}>
              <div className="button">
-              <Button type="primary">查询</Button>
-              <Button>重置</Button>
+              <Button type="primary" onClick={onSearch}>查询</Button>
+              <Button onClick={onReset}>重置</Button>
              </div>
             </Col>
           </Row>
         </Form>
       </div>
       <div className="table">
-        <Table columns={columns} dataSource={data} bordered />
+        <Table
+          columns={columns}
+          dataSource={data}
+          rowKey="symbol"
+          bordered 
+          pagination={
+           {
+            ...params,
+            total: total,
+            showQuickJumper: true,
+            showSizeChanger: true,
+            showTitle: true,
+            onChange: paginationChagne,
+           }
+          }
+        />
       </div>
     </div>
     
