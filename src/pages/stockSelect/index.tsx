@@ -74,6 +74,10 @@ function App() {
 
   const onSearch = () => {
     form.validateFields().then((values) => {
+      setParams({
+        current: 1,
+        pageSize: 10,
+      })
       setCurrentParams(values);
     })
   }
@@ -93,6 +97,10 @@ function App() {
     form.resetFields();
     // 重新调用列表的接口
     setCurrentParams({});
+    setParams({
+      current: 1,
+      pageSize: 10,
+    })
   }
 
   return (
