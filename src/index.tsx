@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { ConfigProvider } from 'antd';
 import App from './App';
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, HistoryRouterProps } from "react-router-dom";
 import dayjs from 'dayjs';
 import 'dayjs/locale/zh-cn';
 import zhCN from 'antd/es/locale/zh_CN';

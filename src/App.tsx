@@ -1,6 +1,7 @@
 import * as React from 'react';
-import Home from './pages/stockSelect';
+import StockSelect from './pages/stockSelect';
 import About from './pages/about';
+import Home from './pages/home';
 import Layout from './layout';
 import { Route, Routes } from "react-router-dom"
 import './App.css';
@@ -10,8 +11,9 @@ function App() {
   return (
     <Routes>
       <Route path="/" element={<Layout />}> 
-        <Route path="stock/select" element={<Home />}></Route>
+        <Route path="stock/select" element={<StockSelect />}></Route>
         <Route path="about" element={<About />}></Route>
+        <Route path="/" element={<Home />}></Route>
       </Route>
       <Route path="login" element={<Login />}></Route>
     </Routes>
