@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { Route } from 'react-router';
 
 const errorHandle = (status: any, data: any) => {
   switch (status) {
@@ -20,7 +21,15 @@ const errorHandle = (status: any, data: any) => {
 const addResponseFilter = (instance: AxiosInstance) => {
   instance.interceptors.response.use((res: { status: number; data: any; }) => {
     if (res.status === 200) {
-      return Promise.resolve(res.data);
+      if (res?.data.code === 500) {
+        window.location.href = '/login';
+      } else {
+        return Promise.resolve(res.data);
+      }
+     
+    }
+    if (res.status === 500) {
+      window.location.href = '/login'
     }
     return Promise.reject(res)
   }, (err: { response: any; }) => {
