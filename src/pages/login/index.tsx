@@ -6,7 +6,8 @@ import useLogin from './useLogin';
 // import bgc from './loginbgc.jpeg';
 
 
-const Login: FC = (): ReactElement => {
+const Login: FC = (props): ReactElement => {
+  console.log(props)
   const [ loginForm ] = Form.useForm();
   const { loginSubmit } = useLogin({loginForm});
 
