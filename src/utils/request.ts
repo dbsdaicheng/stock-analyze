@@ -1,5 +1,6 @@
 import axios, { AxiosInstance } from 'axios';
 import { Route } from 'react-router';
+import { getCookie } from './utils';
 
 const errorHandle = (status: any, data: any) => {
   switch (status) {
@@ -19,6 +20,12 @@ const errorHandle = (status: any, data: any) => {
 
 //添加通用的返回数据拦截
 const addResponseFilter = (instance: AxiosInstance) => {
+  instance.interceptors.request.use((config: any) => {
+    if (config.url !== '/api/user/login') {
+      config.headers.token = getCookie("stockToken") || ""
+    }
+    return config;
+  })
   instance.interceptors.response.use((res: { status: number; data: any; }) => {
     if (res.status === 200) {
       if (res?.data.code === 500) {

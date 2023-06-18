@@ -23,13 +23,13 @@ const Login: FC = (): ReactElement => {
             onFinish={loginSubmit}
           >
             <Form.Item
-              name="username"
+              name="userName"
               rules={[{ required: true, message: '请输入用户名!' }]}
             >
               <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="用户名" />
             </Form.Item>
             <Form.Item
-              name="password"
+              name="pwd"
               rules={[{ required: true, message: '请输入密码!' }]}
             >
               <Input.Password
@@ -41,7 +41,7 @@ const Login: FC = (): ReactElement => {
               />
             </Form.Item>
             <Form.Item>
-              <a className="login-form-forgot" href="www.baidu.com">
+              <a className="login-form-forgot" href="https://wwww.baidu.com">
                 忘记密码
               </a>
             </Form.Item>

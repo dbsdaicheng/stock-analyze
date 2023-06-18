@@ -1,9 +1,10 @@
 import { UploadOutlined, UserOutlined, VideoCameraOutlined } from '@ant-design/icons';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, MenuProps } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 const { Header, Content, Footer, Sider } = Layout;
 import './index.less';
+type MenuItem = Required<MenuProps>['items'][number];
 
 const App: React.FC = () => {
   const navigate = useNavigate();
@@ -12,6 +13,18 @@ const App: React.FC = () => {
   useEffect(() => {
     setSelectedKeys([window.location.pathname]);
   }, [window.location.pathname])
+
+  const items: MenuItem[] = [
+    {
+      key: "/stock/select",
+      icon: React.createElement(UserOutlined),
+      label: `股票筛选列表`,
+    },{
+      key: "/stock/strategy",
+      icon: React.createElement(UserOutlined),
+      label: `股票策略列表`,
+    }
+  ]
 
   return (
     <Layout>
@@ -33,13 +46,7 @@ const App: React.FC = () => {
           className="menu"
           onSelect={({item, key}) => navigate(key)}
           selectedKeys={selectedKeys}
-          items={[UserOutlined].map(
-            (icon, index) => ({
-              key: "/stock/select",
-              icon: React.createElement(icon),
-              label: `股票筛选列表`,
-            }),
-          )}
+          items={items}
         />
       </Sider>
       <Layout>
